@@ -148,7 +148,11 @@ SOURCES += \
     widgets/CutterDockWidget.cpp \
     widgets/GraphWidget.cpp \
     utils/JsonTreeItem.cpp \
-    utils/JsonModel.cpp
+    utils/JsonModel.cpp \
+    widgets/AbstractTableView.cpp \
+    dialogs/ColumnReorderDialog.cpp \
+    widgets/TableDisassemblyWidget.cpp
+# widgets/Disassembly.cpp \
 
 HEADERS  += \
     Cutter.h \
@@ -219,7 +223,12 @@ HEADERS  += \
     widgets/CutterDockWidget.h \
     widgets/GraphWidget.h \
     utils/JsonTreeItem.h \
-    utils/JsonModel.h
+    utils/JsonModel.h \
+    widgets/AbstractTableView.h \
+    utils/StringUtil.h \
+    dialogs/ColumnReorderDialog.h \
+    widgets/TableDisassemblyWidget.h
+#    widgets/Disassembly.h \
 
 FORMS    += \
     dialogs/AboutDialog.ui \
@@ -259,7 +268,8 @@ FORMS    += \
     widgets/TypesWidget.ui \
     widgets/SearchWidget.ui \
     widgets/JupyterWidget.ui \
-    dialogs/R2PluginsDialog.ui
+    dialogs/R2PluginsDialog.ui \
+    dialogs/ColumnReorderDialog.ui
 
 RESOURCES += \
     resources.qrc \

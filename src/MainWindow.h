@@ -41,6 +41,7 @@ class ResourcesWidget;
 class VTablesWidget;
 class TypesWidget;
 class SearchWidget;
+class TableDisassemblyWidget;
 #ifdef CUTTER_ENABLE_JUPYTER
 class JupyterWidget;
 #endif
@@ -170,6 +171,7 @@ private:
     QList<QDockWidget *> dockWidgets;
     QMap<QAction *, QDockWidget *> dockWidgetActions;
     DisassemblyWidget  *disassemblyDock = nullptr;
+    TableDisassemblyWidget  *tableDisassemblyDock = nullptr;
     SidebarWidget      *sidebarDock = nullptr;
     HexdumpWidget      *hexdumpDock = nullptr;
     PseudocodeWidget   *pseudocodeDock = nullptr;

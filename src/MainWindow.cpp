@@ -43,6 +43,7 @@
 
 #include "dialogs/NewFileDialog.h"
 #include "widgets/DisassemblerGraphView.h"
+#include "widgets/TableDisassemblyWidget.h"
 #include "widgets/GraphWidget.h"
 #include "widgets/FunctionsWidget.h"
 #include "widgets/SectionsWidget.h"
@@ -152,6 +153,7 @@ void MainWindow::initUI()
     dockWidgets.reserve(20);
 
     disassemblyDock = new DisassemblyWidget(this, ui->actionDisassembly);
+    tableDisassemblyDock = new TableDisassemblyWidget(this, ui->actionDisassembly);
     sidebarDock = new SidebarWidget(this, ui->actionSidebar);
     hexdumpDock = new HexdumpWidget(this, ui->actionHexdump);
     pseudocodeDock = new PseudocodeWidget(this, ui->actionPseudocode);
@@ -443,6 +445,7 @@ void MainWindow::restoreDocks()
     // Tabs for center (must be applied after splitDockWidget())
     tabifyDockWidget(sectionsDock, commentsDock);
     tabifyDockWidget(dashboardDock, disassemblyDock);
+    tabifyDockWidget(dashboardDock, tableDisassemblyDock);
     tabifyDockWidget(dashboardDock, graphDock);
     tabifyDockWidget(dashboardDock, hexdumpDock);
     tabifyDockWidget(dashboardDock, pseudocodeDock);
@@ -494,6 +497,7 @@ void MainWindow::showDefaultDocks()
                                                 symbolsDock,
                                                 graphDock,
                                                 disassemblyDock,
+                                                tableDisassemblyDock,
                                                 sidebarDock,
                                                 hexdumpDock,
                                                 pseudocodeDock,

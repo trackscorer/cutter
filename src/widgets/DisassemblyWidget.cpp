@@ -72,9 +72,8 @@ DisassemblyWidget::DisassemblyWidget(MainWindow *main, QAction *action)
     // wrapping breaks readCurrentDisassemblyOffset() at the moment :-(
     mDisasTextEdit->setWordWrapMode(QTextOption::NoWrap);
 
-    // Increase asm text edit margin
-    QTextDocument *asm_docu = mDisasTextEdit->document();
-    asm_docu->setDocumentMargin(10);
+    // Adjust asm text edit margin
+    mDisasTextEdit->document()->setDocumentMargin(0);
 
     // Event filter to intercept double clicks in the textbox
     mDisasTextEdit->viewport()->installEventFilter(this);
@@ -256,7 +255,7 @@ void DisassemblyWidget::scrollInstructions(int count)
 
 bool DisassemblyWidget::updateMaxLines()
 {
-    int currentMaxLines = qhelpers::getMaxFullyDisplayedLines(mDisasTextEdit);
+    int currentMaxLines = qhelpers::getMaxFullyDisplayedLines(mDisasTextEdit) + 1;
 
     if (currentMaxLines != maxLines) {
         maxLines = currentMaxLines;
