@@ -7,7 +7,7 @@
 #include <QPainter>
 #include <QShortcut>
 
-#include "widgets/GraphView.h"
+#include "widgets/disassembly/GraphView.h"
 #include "menus/DisassemblyContextMenu.h"
 #include "utils/RichTextPainter.h"
 

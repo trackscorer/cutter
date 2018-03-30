@@ -6,6 +6,7 @@
 
 #include "MainWindow.h"
 #include "utils/Helpers.h"
+#include <QShortcut>
 
 
 StringsModel::StringsModel(QList<StringDescription> *strings, QObject *parent)

@@ -1,6 +1,7 @@
 #include <QDockWidget>
 #include <QTreeWidget>
 #include <QComboBox>
+#include <QShortcut>
 #include "SearchWidget.h"
 #include "ui_SearchWidget.h"
 #include "MainWindow.h"

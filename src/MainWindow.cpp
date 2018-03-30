@@ -42,15 +42,18 @@
 #include "utils/SvgIconEngine.h"
 
 #include "dialogs/NewFileDialog.h"
-#include "widgets/DisassemblerGraphView.h"
-#include "widgets/TableDisassemblyWidget.h"
-#include "widgets/GraphWidget.h"
+#include "widgets/disassembly/DisassemblyTextWidget.h"
+#include "widgets/disassembly/DisassemblyTableWidget.h"
+#include "widgets/disassembly/DisassemblyGraphWidget.h"
 #include "widgets/FunctionsWidget.h"
 #include "widgets/SectionsWidget.h"
 #include "widgets/CommentsWidget.h"
 #include "widgets/ImportsWidget.h"
 #include "widgets/ExportsWidget.h"
 #include "widgets/TypesWidget.h"
+#include "widgets/SidebarWidget.h"
+#include "widgets/PseudocodeWidget.h"
+#include "widgets/HexdumpWidget.h"
 #include "widgets/SearchWidget.h"
 #include "widgets/SymbolsWidget.h"
 #include "widgets/StringsWidget.h"
@@ -152,21 +155,20 @@ void MainWindow::initUI()
      */
     dockWidgets.reserve(20);
 
-    disassemblyDock = new DisassemblyWidget(this, ui->actionDisassembly);
-    tableDisassemblyDock = new TableDisassemblyWidget(this, ui->actionDisassembly);
+    disassemblyTextDock = new DisassemblyTextWidget(this, ui->actionDisassembly);
+    disassemblyTableDock = new DisassemblyTableWidget(this, ui->actionDisassembly);
     sidebarDock = new SidebarWidget(this, ui->actionSidebar);
     hexdumpDock = new HexdumpWidget(this, ui->actionHexdump);
     pseudocodeDock = new PseudocodeWidget(this, ui->actionPseudocode);
     consoleDock = new ConsoleWidget(this, ui->actionConsole);
 
     // Add graph view as dockable
-    graphDock = new GraphWidget(this, ui->actionGraph);
+    graphDock = new DisassemblerGraphWidget(this, ui->actionGraph);
 
     // Hide centralWidget as we do not need it
     ui->centralWidget->hide();
 
     sectionsDock = new SectionsDock(this, ui->actionSections);
-    disassemblyDock = new DisassemblyWidget(this, ui->actionDisassembly);
     entrypointDock = new EntrypointWidget(this, ui->actionEntrypoints);
     functionsDock = new FunctionsWidget(this, ui->actionFunctions);
     importsDock = new ImportsWidget(this, ui->actionImports);
@@ -185,7 +187,6 @@ void MainWindow::initUI()
     ui->actionJupyter->setVisible(false);
 #endif
     dashboardDock = new Dashboard(this, ui->actionDashboard);
-    disassemblyDock = new DisassemblyWidget(this, ui->actionDisassembly);
     sdbDock = new SdbDock(this, ui->actionSDBBrowser);
     classesDock = new ClassesWidget(this, ui->actionClasses);
     resourcesDock = new ResourcesWidget(this, ui->actionResources);
@@ -444,8 +445,8 @@ void MainWindow::restoreDocks()
 
     // Tabs for center (must be applied after splitDockWidget())
     tabifyDockWidget(sectionsDock, commentsDock);
-    tabifyDockWidget(dashboardDock, disassemblyDock);
-    tabifyDockWidget(dashboardDock, tableDisassemblyDock);
+    tabifyDockWidget(dashboardDock, disassemblyTextDock);
+    tabifyDockWidget(dashboardDock, disassemblyTableDock);
     tabifyDockWidget(dashboardDock, graphDock);
     tabifyDockWidget(dashboardDock, hexdumpDock);
     tabifyDockWidget(dashboardDock, pseudocodeDock);
@@ -496,8 +497,8 @@ void MainWindow::showDefaultDocks()
                                                 importsDock,
                                                 symbolsDock,
                                                 graphDock,
-                                                disassemblyDock,
-                                                tableDisassemblyDock,
+                                                disassemblyTextDock,
+                                                disassemblyTableDock,
                                                 sidebarDock,
                                                 hexdumpDock,
                                                 pseudocodeDock,

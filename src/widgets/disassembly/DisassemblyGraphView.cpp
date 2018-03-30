@@ -1,4 +1,4 @@
-#include "DisassemblerGraphView.h"
+#include "DisassemblyGraphView.h"
 
 #include <QPainter>
 #include <QJsonObject>

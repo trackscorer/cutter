@@ -4,10 +4,6 @@
 #include <memory>
 
 #include "Cutter.h" // only needed for ut64
-#include "widgets/DisassemblyWidget.h"
-#include "widgets/SidebarWidget.h"
-#include "widgets/HexdumpWidget.h"
-#include "widgets/PseudocodeWidget.h"
 #include "dialogs/NewFileDialog.h"
 #include "utils/Configuration.h"
 
@@ -35,13 +31,17 @@ class QAction;
 class SectionsDock;
 class ConsoleWidget;
 class EntrypointWidget;
-class DisassemblerGraphView;
 class ClassesWidget;
 class ResourcesWidget;
 class VTablesWidget;
 class TypesWidget;
 class SearchWidget;
-class TableDisassemblyWidget;
+class HexdumpWidget;
+class SidebarWidget;
+class PseudocodeWidget;
+class DisassemblyGraphWidget;
+class DisassemblyTextWidget;
+class DisassemblyTableWidget;
 #ifdef CUTTER_ENABLE_JUPYTER
 class JupyterWidget;
 #endif
@@ -170,8 +170,8 @@ private:
 
     QList<QDockWidget *> dockWidgets;
     QMap<QAction *, QDockWidget *> dockWidgetActions;
-    DisassemblyWidget  *disassemblyDock = nullptr;
-    TableDisassemblyWidget  *tableDisassemblyDock = nullptr;
+    DisassemblyTextWidget  *disassemblyTextDock = nullptr;
+    DisassemblyTableWidget  *disassemblyTableDock = nullptr;
     SidebarWidget      *sidebarDock = nullptr;
     HexdumpWidget      *hexdumpDock = nullptr;
     PseudocodeWidget   *pseudocodeDock = nullptr;
@@ -195,7 +195,7 @@ private:
     ClassesWidget      *classesDock = nullptr;
     ResourcesWidget    *resourcesDock = nullptr;
     VTablesWidget      *vTablesDock = nullptr;
-    DisassemblerGraphView *graphView = nullptr;
+    DisassemblyGraphWidget *diassemblyGraphDock = nullptr;
     QDockWidget        *asmDock = nullptr;
     QDockWidget        *calcDock = nullptr;
     NewFileDialog      *newFileDialog = nullptr;

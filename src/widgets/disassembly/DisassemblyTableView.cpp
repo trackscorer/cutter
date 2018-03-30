@@ -1,19 +1,7 @@
-#include "TableDisassemblyWidget.h"
-#include "menus/DisassemblyContextMenu.h"
-#include "utils/HexAsciiHighlighter.h"
-#include "utils/HexHighlighter.h"
+#include "DisassemblyTableView.h"
 #include "utils/Configuration.h"
-#include "utils/Helpers.h"
 #include "utils/TempConfig.h"
 #include "utils/RichTextPainter.h"
-
-#include <QScrollBar>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QVBoxLayout>
-#include <QRegularExpression>
-#include <QLabel>
-
 
 DisassemblyTableView::DisassemblyTableView(QWidget *parent)
     : AbstractTableView(parent)
@@ -29,14 +17,12 @@ DisassemblyTableView::DisassemblyTableView(QWidget *parent)
     addColumnAt(1000, "", false); //comments
 }
 
-
 void DisassemblyTableView::updateColors()
 {
     qDebug() << "Updating colors";
     AbstractTableView::updateColors();
     backgroundColor = ConfigColor("gui.background");
 }
-
 
 void DisassemblyTableView::prepareData()
 {
@@ -57,7 +43,6 @@ void DisassemblyTableView::prepareData()
     mInstBuffer = disassemblyLines;
     setNbrOfLineToPrint(viewableRowsCount);
 }
-
 
 QString DisassemblyTableView::paintContent(QPainter *painter, dsint rowBase, int rowOffset, int col, int x, int y, int w, int h)
 {
@@ -93,50 +78,4 @@ QString DisassemblyTableView::paintContent(QPainter *painter, dsint rowBase, int
     break;
     }
     return QString();
-}
-
-
-TableDisassemblyWidget::TableDisassemblyWidget(MainWindow *main, QAction *action)
-    :   CutterDockWidget(main, action),
-      mCtxMenu(new DisassemblyContextMenu((QWidget*) this))
-{
-    this->setObjectName("TableDisassemblyWidget");
-    this->setAllowedAreas(Qt::AllDockWidgetAreas);
-    this->setWindowTitle(tr("Table Disassembly"));
-    this->disassemblyTable = new DisassemblyTableView(this);
-    setWidget(disassemblyTable);
-
-    setupColors();
-
-    connect(Core(), SIGNAL(seekChanged(RVA)), this, SLOT(on_seekChanged(RVA)));
-    connect(Core(), SIGNAL(raisePrioritizedMemoryWidget(CutterCore::MemoryWidgetType)), this,
-            SLOT(raisePrioritizedMemoryWidget(CutterCore::MemoryWidgetType)));
-
-    // connect(Config(), SIGNAL(fontsUpdated()), this, SLOT(fontsUpdatedSlot()));
-    // connect(Config(), SIGNAL(colorsUpdated()), this, SLOT(colorsUpdatedSlot()));
-
-    connect(this, &QDockWidget::visibilityChanged, this, [](bool visibility) {
-        if (visibility) {
-            Core()->setMemoryWidgetPriority(CutterCore::MemoryWidgetType::Disassembly);
-        }
-    });
-}
-
-void TableDisassemblyWidget::on_seekChanged(RVA offset)
-{
-    Q_UNUSED(offset);
-    disassemblyTable->repaint();
-}
-
-void TableDisassemblyWidget::raisePrioritizedMemoryWidget(CutterCore::MemoryWidgetType type)
-{
-    if (type == CutterCore::MemoryWidgetType::Disassembly) {
-        raise();
-        setFocus();
-    }
-}
-
-void TableDisassemblyWidget::setupColors()
-{
-    disassemblyTable->updateColors();
 }

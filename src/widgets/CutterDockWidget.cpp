@@ -1,3 +1,4 @@
+#include <QAction>
 #include "CutterDockWidget.h"
 #include "MainWindow.h"
 

@@ -1,8 +1,8 @@
 #include "MainWindow.h"
-#include "GraphWidget.h"
-#include "DisassemblerGraphView.h"
+#include "DisassemblyGraphWidget.h"
+#include "DisassemblyGraphView.h"
 
-GraphWidget::GraphWidget(MainWindow *main, QAction *action) :
+DisassemblerGraphWidget::DisassemblerGraphWidget(MainWindow *main, QAction *action) :
     CutterDockWidget(main, action)
 {
     this->setObjectName("Graph");
@@ -28,4 +28,4 @@ GraphWidget::GraphWidget(MainWindow *main, QAction *action) :
 
 }
 
-GraphWidget::~GraphWidget() {}
+DisassemblerGraphWidget::~DisassemblerGraphWidget() {}

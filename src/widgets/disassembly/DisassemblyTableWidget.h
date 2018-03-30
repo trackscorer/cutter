@@ -2,32 +2,20 @@
 #define TABLEDISASSEMBLYWIDGET_H
 
 #include "Cutter.h"
-#include "CutterDockWidget.h"
 #include <QTextEdit>
 #include <QPlainTextEdit>
 #include <QShortcut>
-#include "widgets/AbstractTableView.h"
+#include "AbstractTableView.h"
+#include "../CutterDockWidget.h"
+#include "widgets/disassembly/DisassemblyTableView.h"
 
 class DisassemblyContextMenu;
 
-class DisassemblyTableView: public AbstractTableView
-{
-    virtual QString paintContent(QPainter* painter, long long rowBase, int rowOffset, int col, int x, int y, int w, int h) override;
-
-public:
-    DisassemblyTableView(QWidget *parent = nullptr);
-    virtual void updateColors() override;
-    virtual void prepareData() override;
-
-private:
-    QList<DisassemblyLine> mInstBuffer;
-};
-
-class TableDisassemblyWidget : public CutterDockWidget
+class DisassemblyTableWidget : public CutterDockWidget
 {
     Q_OBJECT
 public:
-    explicit TableDisassemblyWidget(MainWindow *main, QAction *action = nullptr);
+    explicit DisassemblyTableWidget(MainWindow *main, QAction *action = nullptr);
     QWidget *getTextWidget();
 
 private:

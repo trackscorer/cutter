@@ -82,7 +82,6 @@ unix:CUTTER_ENABLE_JUPYTER|macx:CUTTER_ENABLE_JUPYTER {
 SOURCES += \
     Main.cpp \
     Cutter.cpp \
-    widgets/DisassemblerGraphView.cpp \
     utils/RichTextPainter.cpp \
     dialogs/OptionsDialog.cpp \
     dialogs/AboutDialog.cpp \
@@ -118,7 +117,6 @@ SOURCES += \
     widgets/StringsWidget.cpp \
     widgets/SymbolsWidget.cpp \
     menus/DisassemblyContextMenu.cpp \
-    widgets/DisassemblyWidget.cpp \
     widgets/SidebarWidget.cpp \
     widgets/HexdumpWidget.cpp \
     utils/Configuration.cpp \
@@ -129,7 +127,6 @@ SOURCES += \
     utils/SyntaxHighlighter.cpp \
     widgets/PseudocodeWidget.cpp \
     widgets/VisualNavbar.cpp \
-    widgets/GraphView.cpp \
     dialogs/preferences/PreferencesDialog.cpp \
     dialogs/preferences/GeneralOptionsWidget.cpp \
     dialogs/preferences/GraphOptionsWidget.cpp \
@@ -146,17 +143,20 @@ SOURCES += \
     utils/NestedIPyKernel.cpp \
     dialogs/R2PluginsDialog.cpp \
     widgets/CutterDockWidget.cpp \
-    widgets/GraphWidget.cpp \
     utils/JsonTreeItem.cpp \
     utils/JsonModel.cpp \
-    widgets/AbstractTableView.cpp \
     dialogs/ColumnReorderDialog.cpp \
-    widgets/TableDisassemblyWidget.cpp
+    widgets/disassembly/GraphView.cpp \
+    widgets/disassembly/AbstractTableView.cpp \
+    widgets/disassembly/DisassemblyTextWidget.cpp \
+    widgets/disassembly/DisassemblyTableView.cpp \
+    widgets/disassembly/DisassemblyGraphWidget.cpp \
+    widgets/disassembly/DisassemblyGraphView.cpp \
+    widgets/disassembly/DisassemblyTableWidget.cpp
 # widgets/Disassembly.cpp \
 
 HEADERS  += \
     Cutter.h \
-    widgets/DisassemblerGraphView.h \
     utils/RichTextPainter.h \
     utils/CachedFontMetrics.h \
     dialogs/AboutDialog.h \
@@ -193,7 +193,6 @@ HEADERS  += \
     widgets/StringsWidget.h \
     widgets/SymbolsWidget.h \
     menus/DisassemblyContextMenu.h \
-    widgets/DisassemblyWidget.h \
     widgets/SidebarWidget.h \
     widgets/HexdumpWidget.h \
     utils/Configuration.h \
@@ -204,7 +203,6 @@ HEADERS  += \
     utils/SyntaxHighlighter.h \
     widgets/PseudocodeWidget.h \
     widgets/VisualNavbar.h \
-    widgets/GraphView.h \
     dialogs/preferences/PreferencesDialog.h \
     dialogs/preferences/GeneralOptionsWidget.h \
     dialogs/preferences/GraphOptionsWidget.h \
@@ -221,13 +219,17 @@ HEADERS  += \
     utils/NestedIPyKernel.h \
     dialogs/R2PluginsDialog.h \
     widgets/CutterDockWidget.h \
-    widgets/GraphWidget.h \
     utils/JsonTreeItem.h \
     utils/JsonModel.h \
-    widgets/AbstractTableView.h \
     utils/StringUtil.h \
     dialogs/ColumnReorderDialog.h \
-    widgets/TableDisassemblyWidget.h
+    widgets/disassembly/GraphView.h \
+    widgets/disassembly/AbstractTableView.h \
+    widgets/disassembly/DisassemblyTableWidget.h \
+    widgets/disassembly/DisassemblyTextWidget.h \
+    widgets/disassembly/DisassemblyTableView.h \
+    widgets/disassembly/DisassemblyGraphWidget.h \
+    widgets/disassembly/DisassemblyGraphView.h
 #    widgets/Disassembly.h \
 
 FORMS    += \
