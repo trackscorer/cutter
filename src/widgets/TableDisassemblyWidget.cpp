@@ -5,6 +5,7 @@
 #include "utils/Configuration.h"
 #include "utils/Helpers.h"
 #include "utils/TempConfig.h"
+#include "utils/RichTextPainter.h"
 
 #include <QScrollBar>
 #include <QJsonArray>
@@ -14,39 +15,97 @@
 #include <QLabel>
 
 
-#include "widgets/AbstractTableView.h"
-
-
-class DisassemblyTableView: AbstractTableView
+DisassemblyTableView::DisassemblyTableView(QWidget *parent)
+    : AbstractTableView(parent)
 {
-    virtual QString paintContent(QPainter* painter, dsint rowBase, int rowOffset, int col, int x, int y, int w, int h) override;
-};
+    // Update fonts immediately because they are used in calculations
+    updateFonts();
+
+    setRowCount(100);
+
+    addColumnAt(getCharWidth() * 2 * sizeof(dsint) + 8, "", false); //address
+    addColumnAt(getCharWidth() * 2 * 12 + 8, "", false); //bytes
+    addColumnAt(getCharWidth() * 40, "", false); //disassembly
+    addColumnAt(1000, "", false); //comments
+}
+
+
+void DisassemblyTableView::updateColors()
+{
+    qDebug() << "Updating colors";
+    AbstractTableView::updateColors();
+    backgroundColor = ConfigColor("gui.background");
+}
+
+
+void DisassemblyTableView::prepareData()
+{
+    ut64 viewableRowsCount = getViewableRowsCount();
+    mInstBuffer.clear();
+    mInstBuffer.reserve(viewableRowsCount);
+
+    ut64 addr = getTableOffset();
+
+    QList<DisassemblyLine> disassemblyLines;
+    {
+        TempConfig tempConfig;
+        tempConfig.set("scr.html", true)
+        .set("scr.color", COLOR_MODE_16M);
+        disassemblyLines = Core()->disassembleLines(addr, viewableRowsCount);
+    }
+
+    mInstBuffer = disassemblyLines;
+    setNbrOfLineToPrint(viewableRowsCount);
+}
 
 
 QString DisassemblyTableView::paintContent(QPainter *painter, dsint rowBase, int rowOffset, int col, int x, int y, int w, int h)
 {
-    // TODO
+    qDebug() << "Painting !" << rowBase << rowOffset << col << x << y << w << h;
+
+    ut64 cur_addr = mInstBuffer.at(rowOffset).offset;
+    // TODO Change mInstBuffer list type
+
+    switch(col)
+    {
+    case 0: // Draw address (+ label)
+    {
+        QString addrText = QString("%1").arg(cur_addr);
+        QColor background = backgroundColor;
+        painter->fillRect(QRect(x, y, w, h), QBrush(background));
+        painter->drawText(QRect(x + 4, y, w - 4, h), Qt::AlignVCenter | Qt::AlignLeft, addrText);
+    }
+    break;
+
+    case 1: //draw bytes (TODO: some spaces between bytes)
+    {
+        //TODO Yeah cf the other TODO above mInst type
+        QTextDocument textDoc;
+        textDoc.setHtml(mInstBuffer.at(rowOffset).text);
+        RichTextPainter::List richText = RichTextPainter::fromTextDocument(textDoc);
+        RichTextPainter::paintRichText(painter, x, y, getColumnWidth(col), getRowHeight(), 10, richText, mFontMetrics);
+    }
+    break;
+
+    case 3: //draw comments
+    {
+    }
+    break;
+    }
     return QString();
 }
 
 
 TableDisassemblyWidget::TableDisassemblyWidget(MainWindow *main, QAction *action)
-    :   CutterDockWidget(main, action)
-    ,   mCtxMenu(new DisassemblyContextMenu(this))
+    :   CutterDockWidget(main, action),
+      mCtxMenu(new DisassemblyContextMenu((QWidget*) this))
 {
-    setWindowTitle(tr("Table Disassembly"));
+    this->setObjectName("TableDisassemblyWidget");
+    this->setAllowedAreas(Qt::AllDockWidgetAreas);
+    this->setWindowTitle(tr("Table Disassembly"));
+    this->disassemblyTable = new DisassemblyTableView(this);
+    setWidget(disassemblyTable);
 
-    QVBoxLayout *layout = new QVBoxLayout();
-    //layout->addWidget(mDisasTextEdit);
-    //layout->setMargin(0);
-
-    QLabel *testWidget = new QLabel("Test", this);
-    setWidget(testWidget);
-
-    setAllowedAreas(Qt::AllDockWidgetAreas);
-    setObjectName("TableDisassemblyWidget");
-
-    setupFonts();
     setupColors();
 
     connect(Core(), SIGNAL(seekChanged(RVA)), this, SLOT(on_seekChanged(RVA)));
@@ -65,6 +124,8 @@ TableDisassemblyWidget::TableDisassemblyWidget(MainWindow *main, QAction *action
 
 void TableDisassemblyWidget::on_seekChanged(RVA offset)
 {
+    Q_UNUSED(offset);
+    disassemblyTable->repaint();
 }
 
 void TableDisassemblyWidget::raisePrioritizedMemoryWidget(CutterCore::MemoryWidgetType type)
@@ -75,11 +136,7 @@ void TableDisassemblyWidget::raisePrioritizedMemoryWidget(CutterCore::MemoryWidg
     }
 }
 
-void TableDisassemblyWidget::setupFonts()
-{
-}
-
-
 void TableDisassemblyWidget::setupColors()
 {
+    disassemblyTable->updateColors();
 }

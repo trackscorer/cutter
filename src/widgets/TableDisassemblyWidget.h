@@ -6,8 +6,22 @@
 #include <QTextEdit>
 #include <QPlainTextEdit>
 #include <QShortcut>
+#include "widgets/AbstractTableView.h"
 
 class DisassemblyContextMenu;
+
+class DisassemblyTableView: public AbstractTableView
+{
+    virtual QString paintContent(QPainter* painter, long long rowBase, int rowOffset, int col, int x, int y, int w, int h) override;
+
+public:
+    DisassemblyTableView(QWidget *parent = nullptr);
+    virtual void updateColors() override;
+    virtual void prepareData() override;
+
+private:
+    QList<DisassemblyLine> mInstBuffer;
+};
 
 class TableDisassemblyWidget : public CutterDockWidget
 {
@@ -16,13 +30,10 @@ public:
     explicit TableDisassemblyWidget(MainWindow *main, QAction *action = nullptr);
     QWidget *getTextWidget();
 
-/*public slots:
-    void highlightCurrentLine();
-    void showDisasContextMenu(const QPoint &pt);
-    void refreshDisasm(RVA offset = RVA_INVALID);
-    void fontsUpdatedSlot();
-    void colorsUpdatedSlot();
-    void seekPrev();*/
+private:
+    DisassemblyContextMenu *mCtxMenu;
+    DisassemblyTableView *disassemblyTable;
+    void setupColors();
 
 private slots:
     void on_seekChanged(RVA offset);
@@ -32,12 +43,6 @@ private slots:
     bool updateMaxLines();
 
     void cursorPositionChanged();*/
-
-private:
-    DisassemblyContextMenu *mCtxMenu;
-
-    void setupFonts();
-    void setupColors();
 };
 
 
