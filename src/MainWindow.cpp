@@ -208,6 +208,8 @@ void MainWindow::initUI()
     resourcesDock =     DOCK(new ResourcesWidget(this), ui->actionResources);
     vTablesDock =       DOCK(new VTablesWidget(this), ui->actionVTables);
 
+#undef DOCK
+
 
     // Set up dock widgets default layout
     resetToDefaultLayout();
