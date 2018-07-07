@@ -1,6 +1,6 @@
 #include "CutterPythonPlugin.h"
 
-CutterPythonPlugin::CutterPythonPlugin(PyObject* pluginModule)
+CutterPythonPlugin::CutterPythonPlugin(PyObject *pluginModule)
 {
     this->pluginModule = pluginModule;
 
@@ -11,7 +11,28 @@ CutterPythonPlugin::CutterPythonPlugin(PyObject* pluginModule)
     pInstance = PyObject_GetAttrString(pluginModule, "plugin");
     if (!pInstance) {
         qWarning() << "Cannot find plugin instance.";
+        return;
     }
+
+    auto getStringAttr = [this](const char *attrName) -> QString {
+        if (!PyObject_HasAttrString(pInstance, attrName)) {
+            return QString();
+        }
+        PyObject *attr = PyObject_GetAttrString(pInstance, attrName);
+        if (!attr) {
+            PyErr_Print();
+            return QString();
+        }
+        if (!PyUnicode_Check(attr)) {
+            return QString();
+        }
+        return QString::fromUtf8(PyUnicode_AsUTF8(attr));
+    };
+
+    name = getStringAttr("name");
+    description = getStringAttr("description");
+    version = getStringAttr("version");
+    author = getStringAttr("author");
 }
 
 CutterPythonPlugin::~CutterPythonPlugin()
