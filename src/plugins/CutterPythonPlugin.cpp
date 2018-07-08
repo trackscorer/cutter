@@ -90,7 +90,7 @@ QString CutterPythonPlugin::getAttributeFromPython(const char *attribute)
     return result;
 }
 
-CutterDockWidget* CutterPythonPlugin::setupInterface(MainWindow *main, QAction *action)
+CutterDockWidget *CutterPythonPlugin::setupInterface(MainWindow *main, QAction *action)
 {
     Q_UNUSED(main)
     Q_UNUSED(action)
@@ -113,9 +113,15 @@ CutterDockWidget* CutterPythonPlugin::setupInterface(MainWindow *main, QAction *
     }
 
     auto dockWidget = reinterpret_cast<QDockWidget *>(PyLong_AsLong(pWidget));
-    printf("plugin gave me this: %s\n", dockWidget->objectName().toLocal8Bit().constData());
+    if (!dockWidget) {
+        qWarning() << "Cannot instantiate QDockWidget.";
+	Python()->saveThread();
+	return nullptr;
+    }
+
+    CutterDockWidget *cutterWidget = new CutterDockWidget(main, dockWidget, nullptr);
 
     Python()->saveThread();
 
-    return nullptr;
+    return cutterWidget;
 }
