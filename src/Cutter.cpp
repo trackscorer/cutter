@@ -767,12 +767,7 @@ RVA CutterCore::getOffsetJump(RVA addr)
 
 QString CutterCore::getDecompiledCode(RVA addr)
 {
-    return cmd("pdc @ " + QString::number(addr));
-}
-
-QString CutterCore::getDecompiledCode(QString addr)
-{
-    return cmd("pdc @ " + addr);
+    return cmd("pdd @ " + QString::number(addr));
 }
 
 QJsonDocument CutterCore::getFileInfo()
